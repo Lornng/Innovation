@@ -5,7 +5,7 @@
   height: 100vh;
   /* background: rgb(21,11,66); */
   /* background: linear-gradient(23deg, rgba(21,11,66,1) 0%, rgba(123,137,184,1) 100%); */
-  background-color: #1A2337;
+  /* background-color: #1A2337; */
   display: flex;
   flex-direction: column;
   align-items: center;
