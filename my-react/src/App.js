@@ -2,7 +2,7 @@ import './App.css';
 import BlockchainVisualization from './Components/BViz';
 import SearchBar from './Components/searchBar'; //Component names have to start with uppercase because if lowercase JSX treats it as a html element.
 import SpanningTable from './Components/table';
-
+import styled from '@emotion/styled';
 function App() {
   document.body.style.backgroundColor = "#1A2337"
   const data = {
@@ -12,6 +12,7 @@ function App() {
       { from: 'wallet2', to: 'wallet3', tokens: 5 },
     ],
   };
+
   return (
     <div>
       <div className='App'>

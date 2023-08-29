@@ -40,7 +40,7 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 export default function SpanningTable() {  
   return (
-    React.createElement(TableContainer , {sx: {backgroundColor: "#1A2337", margin: "100px"}, component: Paper},
+    React.createElement(TableContainer , {sx: {backgroundColor: "#1A2337", margin: "100px", boxShadow: "none"}, component: Paper},
       React.createElement(Table, { sx: {width: 1000, backgroundColor: "#D9D9D9", margin: "auto", borderRadius: "10px"}, 'aria-label': 'spanning table'},
         React.createElement(TableHead, null,
           React.createElement(TableRow, null,
@@ -54,30 +54,30 @@ export default function SpanningTable() {
             React.createElement(TableCell, { align: 'right' }, 'Sum')
           )
         ),
-        // React.createElement(TableBody, {sx: {backgroundColor: "blue", borderTop: "none", borderRadius: "10px"}},
-        //   rows.map((row) => (
-        //     React.createElement(TableRow, { key: row.desc },
-        //       React.createElement(TableCell, null, row.desc),
-        //       React.createElement(TableCell, { align: 'right' }, row.qty),
-        //       React.createElement(TableCell, { align: 'right' }, row.unit),
-        //       React.createElement(TableCell, { align: 'right' }, ccyFormat(row.price))
-        //     )
-        //   )),
-        //   React.createElement(TableRow, null,
-        //     React.createElement(TableCell, { rowSpan: 3 }),
-        //     React.createElement(TableCell, { colSpan: 2 }, 'Subtotal'),
-        //     React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceSubtotal))
-        //   ),
-        //   React.createElement(TableRow, null,
-        //     React.createElement(TableCell, null, 'Tax'),
-        //     React.createElement(TableCell, { align: 'right' }, `${(TAX_RATE * 100).toFixed(0)} %`),
-        //     React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceTaxes))
-        //   ),
-        //   React.createElement(TableRow, null,
-        //     React.createElement(TableCell, { colSpan: 2 }, 'Total'),
-        //     React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceTotal))
-        //   )
-        // )
+        React.createElement(TableBody, {sx: {backgroundColor: "white", borderTop: "none", borderRadius: "10px"}},
+          rows.map((row) => (
+            React.createElement(TableRow, { key: row.desc },
+              React.createElement(TableCell, null, row.desc),
+              React.createElement(TableCell, { align: 'right' }, row.qty),
+              React.createElement(TableCell, { align: 'right' }, row.unit),
+              React.createElement(TableCell, { align: 'right' }, ccyFormat(row.price))
+            )
+          )),
+          React.createElement(TableRow, null,
+            React.createElement(TableCell, { rowSpan: 3 }),
+            React.createElement(TableCell, { colSpan: 2 }, 'Subtotal'),
+            React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceSubtotal))
+          ),
+          React.createElement(TableRow, {sx: {backgroundColor: "gray"}},
+            React.createElement(TableCell, null, 'Tax'),
+            React.createElement(TableCell, { align: 'right' }, `${(TAX_RATE * 100).toFixed(0)} %`),
+            React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceTaxes))
+          ),
+          React.createElement(TableRow, null,
+            React.createElement(TableCell, { colSpan: 2 }, 'Total'),
+            React.createElement(TableCell, { align: 'right' }, ccyFormat(invoiceTotal))
+          )
+        )
       )
     )    
   );
