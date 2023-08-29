@@ -1,24 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import BlockchainVisualization from './Components/BViz';
+import SearchBar from './Components/searchBar'; //Component names have to start with uppercase because if lowercase JSX treats it as a html element.
 
 function App() {
+  const data = {
+    wallets: ['wallet1', 'wallet2', 'wallet3'],
+    transactions: [
+      { from: 'wallet1', to: 'wallet2', tokens: 10 },
+      { from: 'wallet2', to: 'wallet3', tokens: 5 },
+    ],
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      <div className='App'>
+        <SearchBar placeholder='Insert wallet address...'/>
+      </div>
+      <div>
+      <BlockchainVisualization data={data} />
+      </div>
+     </div>
   );
 }
 
