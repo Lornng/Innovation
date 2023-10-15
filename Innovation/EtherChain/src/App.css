@@ -1,0 +1,93 @@
+/*Swinburne University of Technology*/
+/*Author: Kim Duong Pham*/
+/*COS30049 - Computing Technology Innovation Project*/
+/*Assignment1, Semester 2, 2023*/
+/*Front-end Development for Blockchain Data Visualization System*/
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--color-bg);
+}
+
+a {
+    color: unset;
+    text-decoration: none;
+}
+
+.gradient__bg {
+    background: rgb(2,0,36);
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(5,18,74,1) 0%, rgba(6,15,34,1) 93%);
+}
+
+.gradient__text {
+    background: var(--gradient-text);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section__padding {
+    padding: 4rem 6rem;
+}
+
+.section__margin {
+    padding: 4rem 6rem;
+}
+
+/*animation*/
+.scale-up-center {
+	-webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+ @-webkit-keyframes scale-up-center {
+    0% {
+      -webkit-transform: scale(0.5);
+              transform: scale(0.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  @keyframes scale-up-center {
+    0% {
+      -webkit-transform: scale(0.5);
+              transform: scale(0.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  
+  
+/*responsive section*/
+/*medium devices*/
+@media screen and (max-width: 700px) { 
+    .section__padding {
+        padding: 4rem;
+    }
+
+    .section__margin {
+        padding: 4rem;
+    }
+}
+
+/*mobile devices*/
+@media screen and (max-width: 550px) { 
+    .section__padding {
+        padding: 4rem 2rem;
+    }
+
+    .section__margin {
+        padding: 4rem 2rem;
+    }
+}
+  

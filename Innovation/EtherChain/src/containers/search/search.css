@@ -1,0 +1,67 @@
+.ether__search {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.ether__search-heading {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+    margin-right: 5rem;
+}
+
+.ether__search-heading h1 {
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 50px;
+    line-height: 60px;
+    text-transform: capitalize;
+}
+
+.ether__search-container {
+    flex: 1.5;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    font-family: var(--font-family);
+}
+
+/*responsive code*/
+@media screen and (max-width: 1000px) {
+    .ether__search {
+        flex-direction: column;  
+        width: 100vw;
+    }
+
+    .ether__about-heading {
+        margin: 0 0 2rem 0;
+    }
+
+    .ether__search-heading{
+        margin: auto;
+        text-align: center;
+    }
+    .ether__search-heading h1{
+        font-size: 60px;
+        font-weight: bold;
+    }
+}
+/*phone size*/
+@media screen and (max-width: 550px) {
+    .ether__search-heading h1 {
+        font-size: 40px;
+        line-height: 40px;
+        font-weight: bold;
+    }
+    
+    .ether__search-heading{
+        margin: auto;
+        text-align: center;
+    }
+}
