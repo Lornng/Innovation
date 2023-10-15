@@ -1,0 +1,217 @@
+.ether__header {
+    display: flex;
+}
+
+.ether__header-content {
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 5rem;
+}
+
+.ether__header-content h1 {
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 62px;
+    line-height: 75px;
+    letter-spacing: -0.04em;
+}
+
+.ether__header-content p {
+    font-family: var(--font-family);
+    font-size: 20px;
+    line-height: 27px;
+    color: var(--color-text);
+    margin-top: 1.5rem;
+}
+
+.ether__header-content a {
+    position: relative;
+    background: white;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1rem;
+    font-weight: 550;
+    padding: 10px 30px;
+    transition: 0.5s;
+    top: 2.5rem;
+}
+
+.ether__header-content a:hover {
+    background:  #ff5252;
+    color: #ff5252;
+    letter-spacing: 0.25em;
+    box-shadow: 0 0 35px  #ff5252;
+}
+
+.ether__header-content a:before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: var(--color-bg);
+}
+
+.ether__header-content a span {
+    position: relative;
+    z-index: 1;
+}
+
+.ether__header-content a i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+.ether__header-content a i::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 15px;
+    height: 4px;
+    background: var(--color-bg);
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.ether__header-content a:hover i::before {
+    width: 20px;
+    left: 20px;
+}
+
+.ether__header-content a i::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 15px;
+    height: 4px;
+    background: var(--color-bg);
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.ether__header-content a:hover i::after {
+    width: 20px;
+    left: 80px;
+}
+
+
+.ether__header-content button {
+    flex: 0.6;
+    width: 200px;
+    min-height: 80px;
+    background: #ff5252;
+    font-family: var(--font-family);
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 30px;
+    color: white;
+    cursor: pointer;
+    outline: 0;
+    border: 0;
+    padding: 0 1 rem;
+    border-radius: 5px;
+    margin-top: 3rem;
+}
+
+.ether__header-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ether__header-image img {
+    width: 80%;
+    height: auto;
+    margin-left: 3rem;
+}
+
+/*responsive code*/
+
+
+@media screen and (max-width: 2000px) {
+    .ether__header-content p {
+        font-size: 28px;
+        line-height: 35px;
+    }
+    
+}
+/*average size screen*/
+@media screen and (max-width: 1500px) {
+    .ether__header h1 {
+        font-size: 46px;
+        line-height: 50px;
+    }
+
+    .ether__header-content {
+        margin: 2 0 3rem;
+    }
+
+    .ether__header-content p {
+        font-size: 18px;
+        line-height: 25px;
+    }
+}
+
+@media screen and (max-width: 1075px) {
+    .ether__header {
+        flex-direction: column;
+    }
+
+    .ether__header-content {
+        margin: 2 0 3rem;
+    }
+}
+
+@media screen and (max-width: 770px) {
+    .ether__header-content {
+        margin: 2rem;
+    }
+
+    .ether__header h1 {
+        font-size: 45px;
+        line-height: 50px;
+    }
+
+    .ether__header p {
+        font-size: 15px;
+        line-height: 25px;
+    }
+
+    .ether__header-content a {
+        font-size: 15px;
+        line-height: 25px;
+
+        width: 130px;
+        min-height: 50px;
+    }
+}
+
+@media screen and (max-width: 610px) { /*before the button turns wrong*/
+    .ether__header h1 {
+        font-size: 40px;
+        line-height: 48px;
+    }
+
+    .ether__header p {
+        font-size: 15px;
+        line-height: 25px;
+    }
+
+    .ether__header-content a {
+        font-size: 12px;
+        line-height: 20px;
+
+        width: 100px;
+        min-height: 40px;
+        margin-top: 20px;
+    }
+}
+
+

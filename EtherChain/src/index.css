@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+
+:root {
+    --font-family: 'Inter', sans-serif;
+
+    --gradient-text: linear-gradient(153deg, rgba(131,58,180,1) 0%, rgba(233,85,85,1) 50%, rgba(252,176,69,1) 100%);
+    --gradient-bar: linear-gradient(165deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+
+    --color-bg: #1A2337;
+    --color-footer: #111631;
+    --color-text: #81AFDD;
+}
