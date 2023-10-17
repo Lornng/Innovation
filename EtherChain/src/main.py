@@ -20,8 +20,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#need to define a function to get node basic information
+# need to define a function to get node basic information
 # Define a function to get a node by a property value
+
+
 def get_node_by_address(addressId):
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         # Define a query to retrieve the node by a property value
@@ -38,7 +40,8 @@ def get_node_by_address(addressId):
                 return node['n']
             else:
                 return None
-            
+
+
 @app.get("/get_node/{addressID}")
 async def get_node(addressID: str):
     node = get_node_by_address(addressID)
@@ -61,12 +64,15 @@ async def get_node(addressID: str):
 #     return {"nodes": nodes}
 
 # Define a function to get all nodes without specifying a label
+
+
 def get_all_nodes():
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         with driver.session() as session:
             query = "MATCH (n) RETURN n"
             result = session.run(query)
             return [dict(record['n']) for record in result]
+
 
 @app.get("/getAllNodes")
 async def get_all_nodes_route():
@@ -75,31 +81,26 @@ async def get_all_nodes_route():
 
 # Define a function to run a Cypher query to retrieve node and its relationships
 # Define a function to get all nodes and their relationships
+
+
 def get_all_nodes_and_relationships():
-    print("test")
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         with driver.session() as session:
             query = """
-            MATCH (n)
-            OPTIONAL MATCH (n)-[r]->(related)
-            RETURN n, collect({ from: n.addressId, to: related.addressId }) as relationships
+            MATCH (from)-[r]->(to)
+            RETURN from.addressId AS fromAddress, to.addressId AS toAddress
             """
             result = session.run(query)
-            print("result")
-            records = result.records()
-            data = []
-
-            for record in records:
-                node = record['n']
-                relationships = record['relationships']
-                data.append({"node": dict(node), "relationships": relationships})
-
+            
+            # Use list comprehension to create a list of dictionaries
+            data = [{"from": record["fromAddress"], "to": record["toAddress"], "tokens": 0} for record in result]
+            
             return data
 
 @app.get("/getAllNodesAndRelationships")
 async def get_all_nodes_and_relationships_route():
     data = get_all_nodes_and_relationships()
-    return {"nodesAndRelationships": data}
+    return {"r": data}
 
 
 @app.get("/getGDBAddr")

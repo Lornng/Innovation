@@ -29,12 +29,15 @@ const NetworkVisualization = ({ data }) => {
       tokens: transaction.tokens,
 
     }));
-    console.log(nodes)
+    // console.log("Nodes:")
+    // console.log(nodes)
+    console.log(links)
     originalNodes = nodes;
     originalLinks = links;
-    initalized = true;
+    // initalized = true;
+    
   }
-  console.log(initalized)
+  // console.log(initalized)
 
   let strength, labelBackgroundHeight, labelBackgroundWidth, labelX, labelY, labelTextY, labelTextX, countTextX, countTextY= 0;
 
@@ -44,7 +47,7 @@ const NetworkVisualization = ({ data }) => {
 
   // Determine values based on the screen width
   if (width <= 550) {
-    strength = -1500;
+    strength = -1200;
     labelBackgroundWidth = 90;
     labelBackgroundHeight = 25;
     labelY = 45;
@@ -54,7 +57,7 @@ const NetworkVisualization = ({ data }) => {
     countTextY = 52;
     countTextX = 50;
   } else if (width <= 1000) {
-    strength = -3000;
+    strength = -2700;
     labelBackgroundWidth = 90;
     labelBackgroundHeight = 25;
     labelY = 45;
@@ -64,7 +67,7 @@ const NetworkVisualization = ({ data }) => {
     countTextY = 62;
     countTextX = 50;
   } else {
-    strength = -5000;
+    strength = -3000;
     labelBackgroundWidth = 100;
     labelBackgroundHeight = 30;
     labelY = 64;
@@ -171,15 +174,15 @@ const NetworkVisualization = ({ data }) => {
       .enter().append('g')
       .attr('class', 'label-group');
 
-      // Create background rectangles for labels
-      labelsGroup
-        .append('rect')
-        .attr('class', 'label-bg')
-        .attr('rx', 5) // Rounded corners
-        .attr('ry', 5)
-        .attr('width', labelBackgroundWidth) // Set the width of the background rectangle
-        .attr('height', labelBackgroundHeight) // Set the height of the background rectangle
-        .attr('fill', 'lightgray'); // Background color
+      // // Create background rectangles for labels
+      // labelsGroup
+      //   .append('rect')
+      //   .attr('class', 'label-bg')
+      //   .attr('rx', 5) // Rounded corners
+      //   .attr('ry', 5)
+      //   .attr('width', labelBackgroundWidth) // Set the width of the background rectangle
+      //   .attr('height', labelBackgroundHeight) // Set the height of the background rectangle
+      //   .attr('fill', 'lightgray'); // Background color
 
       // Create text labels and position them
       labelsGroup
