@@ -29,11 +29,12 @@ const NetworkVisualization = ({ data }) => {
       tokens: transaction.tokens,
 
     }));
+    console.log(nodes)
     originalNodes = nodes;
     originalLinks = links;
     initalized = true;
   }
-  // console.log(nodes)
+  console.log(initalized)
 
   let strength, labelBackgroundHeight, labelBackgroundWidth, labelX, labelY, labelTextY, labelTextX, countTextX, countTextY= 0;
 
@@ -87,7 +88,7 @@ const NetworkVisualization = ({ data }) => {
       window.removeEventListener('resize', updateDimensions);
     };
   }, []);
-  
+
   useEffect(() => {
 
     // Select the SVG element using the reference

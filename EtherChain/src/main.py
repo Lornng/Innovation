@@ -47,54 +47,59 @@ async def get_node(addressID: str):
     else:
         return {"error": "Node not found"}
 
-
-#define functions to obtain the remaining properties and relationships for the bottom table
-
-# Define a function to run a Cypher query to retrieve node attributes
-# def get_node_attributes(node_id):
+# Define a function to get all nodes of a specific label
+# def get_all_nodes(label):
 #     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
 #         with driver.session() as session:
-#             query = "MATCH (n:node) RETURN n LIMIT 25;"
-#             result = session.run(query, node_id=node_id)
-#             return result.single()['n']
+#             query = f"MATCH (n:{label}) RETURN n"
+#             result = session.run(query)
+#             return [dict(record['n']) for record in result]
 
-# @app.get("/getNodeAttributes")
-# async def get_node_attributes_route(node_id: int):
-#     node = get_node_attributes(node_id)
-#     return {"attributes": dict(node)}
+# @app.get("/getAllNodes/{label}")
+# async def get_all_nodes_route(label: str):
+#     nodes = get_all_nodes(label)
+#     return {"nodes": nodes}
 
-# Define a function to get all nodes of a specific label
-def get_all_nodes(label):
+# Define a function to get all nodes without specifying a label
+def get_all_nodes():
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         with driver.session() as session:
-            query = f"MATCH (n:{label}) RETURN n"
+            query = "MATCH (n) RETURN n"
             result = session.run(query)
             return [dict(record['n']) for record in result]
 
-@app.get("/getAllNodes/{label}")
-async def get_all_nodes_route(label: str):
-    nodes = get_all_nodes(label)
+@app.get("/getAllNodes")
+async def get_all_nodes_route():
+    nodes = get_all_nodes()
     return {"nodes": nodes}
 
 # Define a function to run a Cypher query to retrieve node and its relationships
-def get_node_and_relationships(node_id):
+# Define a function to get all nodes and their relationships
+def get_all_nodes_and_relationships():
+    print("test")
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         with driver.session() as session:
             query = """
-            MATCH (n:YourLabel {id: $node_id})
+            MATCH (n)
             OPTIONAL MATCH (n)-[r]->(related)
-            RETURN n, collect(r) as relationships
+            RETURN n, collect({ from: n.addressId, to: related.addressId }) as relationships
             """
-            result = session.run(query, node_id=node_id)
-            record = result.single()
-            node = record['n']
-            relationships = record['relationships']
-            return {"node": dict(node), "relationships": relationships}
+            result = session.run(query)
+            print("result")
+            records = result.records()
+            data = []
 
-@app.get("/getNodeAndRelationships/{node_id}")
-async def get_node_and_relationships_route(node_id: str):
-    data = get_node_and_relationships(node_id)
-    return data
+            for record in records:
+                node = record['n']
+                relationships = record['relationships']
+                data.append({"node": dict(node), "relationships": relationships})
+
+            return data
+
+@app.get("/getAllNodesAndRelationships")
+async def get_all_nodes_and_relationships_route():
+    data = get_all_nodes_and_relationships()
+    return {"nodesAndRelationships": data}
 
 
 @app.get("/getGDBAddr")
