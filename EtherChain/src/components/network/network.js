@@ -3,10 +3,12 @@ import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import * as d3Drag from 'd3-drag'; // Import d3-drag for node dragging
 import './network.css';
+import { click } from '@testing-library/user-event/dist/click';
+import { debounce } from 'lodash';
 let originalNodes
 let originalLinks;
-let links;
-let nodes;
+let links = [];
+let nodes = [];
 let link;
 let node;
 let labelsGroup;
@@ -17,9 +19,10 @@ const NetworkVisualization = ({ data }) => {
   const svgRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth * 0.7);
   const [height, setHeight] = useState(window.innerHeight * 0.7);
+    // Debounce the updateDimensions function to reduce reactivity
 
   let [clickedNode, setClickedNode] = useState(null);
-  // console.log("test");
+  // console.log("D " + clickedNode)
   if (initalized == false) {
     // Create nodes and links based on the data prop
     nodes = data.wallets.map(wallet => ({ id: wallet }));
@@ -29,21 +32,14 @@ const NetworkVisualization = ({ data }) => {
       tokens: transaction.tokens,
 
     }));
-    // console.log("Nodes:")
-    // console.log(nodes)
-    console.log(links)
+    // console.log(originalLinks)
     originalNodes = nodes;
     originalLinks = links;
-    // initalized = true;
-    
+    initalized = true;
+
   }
-  // console.log(initalized)
 
-  let strength, labelBackgroundHeight, labelBackgroundWidth, labelX, labelY, labelTextY, labelTextX, countTextX, countTextY= 0;
-
-  // Initialization of variables for dimensions and forces
-  // let width = window.innerWidth * 0.7;
-  // let height = window.innerHeight * 0.7;
+  let strength, labelBackgroundHeight, labelBackgroundWidth, labelX, labelY, labelTextY, labelTextX, countTextX, countTextY = 0;
 
   // Determine values based on the screen width
   if (width <= 550) {
@@ -84,11 +80,14 @@ const NetworkVisualization = ({ data }) => {
     setHeight(window.innerHeight * 0.7);
   };
 
+  const debouncedUpdateDimensions = useRef(debounce(updateDimensions, 500));
   useEffect(() => {
-    window.addEventListener('resize', updateDimensions);
+    // Add an event listener that calls the debounced function
+    window.addEventListener('resize', debouncedUpdateDimensions.current);
 
     return () => {
-      window.removeEventListener('resize', updateDimensions);
+      // Remove the event listener
+      window.removeEventListener('resize', debouncedUpdateDimensions.current);
     };
   }, []);
 
@@ -115,7 +114,7 @@ const NetworkVisualization = ({ data }) => {
         .data(nodes)
         .enter().append('circle')
         .attr('class', 'node')
-        // console.log("Cool")
+
       // Enable drag behavior for the nodes
       node.call(d3Drag.drag()
         .on("start", dragStarted)
@@ -123,9 +122,12 @@ const NetworkVisualization = ({ data }) => {
         .on("end", dragEnded))
         // Add a click event handler to each node
         .on('click', (event, d) => {
-          // console.log("Cool")
           // Call the function to remove labels
           console.log(`Clicked Node ID: ${d.id}`);
+          global.currentId = d.id;
+          console.log(`Saved Node ID: ${global.currentId}`);
+          // console.log(global.curentId); // "I'm a global variable"
+
           // setClickedNode(d.id);
           const connectedNodes = new Set();
           const filteredLinks = originalLinks.filter((link) => {
@@ -146,8 +148,7 @@ const NetworkVisualization = ({ data }) => {
           link = link.data(filteredLinks);
           node = node.data(filteredNodes);
           labelsGroup = labelsGroup.data(filteredNodes);
-          // console.log('ded')
-          
+
           link.exit().remove();
           node.exit().remove();
           labelsGroup.exit().remove();
@@ -167,22 +168,11 @@ const NetworkVisualization = ({ data }) => {
           simulation.alpha(1).restart();
           setClickedNode(d.id);
         });
-        // console.log("Cool")
-        
-      labelsGroup = svg.selectAll('.label-group')
-      .data(nodes)
-      .enter().append('g')
-      .attr('class', 'label-group');
 
-      // // Create background rectangles for labels
-      // labelsGroup
-      //   .append('rect')
-      //   .attr('class', 'label-bg')
-      //   .attr('rx', 5) // Rounded corners
-      //   .attr('ry', 5)
-      //   .attr('width', labelBackgroundWidth) // Set the width of the background rectangle
-      //   .attr('height', labelBackgroundHeight) // Set the height of the background rectangle
-      //   .attr('fill', 'lightgray'); // Background color
+      labelsGroup = svg.selectAll('.label-group')
+        .data(nodes)
+        .enter().append('g')
+        .attr('class', 'label-group');
 
       // Create text labels and position them
       labelsGroup
@@ -195,9 +185,51 @@ const NetworkVisualization = ({ data }) => {
 
     }
 
+    function filterNodesAndLinks(filterValue) {
+      const connectedNodes = new Set();
+      const filteredLinks = originalLinks.filter((link) => {
+        connectedNodes.add(filterValue);
+        if (link.source.id === filterValue) {
+          connectedNodes.add(link.target.id);
+          return true;
+        }
+        if (link.target.id === filterValue) {
+          connectedNodes.add(link.source.id);
+          return true;
+        }
+        return false;
+      });
+      console.log(originalLinks)
+      const filteredNodes = originalNodes.filter((n) => connectedNodes.has(n.id));
+
+      simulation.nodes(filteredNodes).force('link', d3.forceLink(filteredLinks).id(d => d.id));
+
+      link = link.data(filteredLinks);
+      node = node.data(filteredNodes);
+      labelsGroup = labelsGroup.data(filteredNodes);
+
+      link.exit().remove();
+      node.exit().remove();
+      labelsGroup.exit().remove();
+
+      const nodeEnter = node.enter().append('circle').attr('class', 'node');
+      const linkEnter = link.enter().append('line').attr('class', 'link');
+      const labelsEnter = labelsGroup.enter().append('g').attr('class', 'label-group');
+
+      link = linkEnter.merge(link);
+      node = nodeEnter.merge(node);
+      labelsGroup = labelsEnter.merge(labelsGroup)
+
+      links = filteredLinks;
+      node.call(d3Drag.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded));
+      nodes = filteredNodes;
+      simulation.alpha(1).restart();
+    }
+
     // Call the createSVGElements function during initialization
     createSVGElements();
-
+    // filterNodesAndLinks()
+    console.log("HEHE")
     // Function to reset the visualization after simulation refresh
     function resetVisualization() {
       // Remove existing elements
@@ -210,6 +242,7 @@ const NetworkVisualization = ({ data }) => {
     }
     // Event handler for node drag start
     function dragStarted(event, d) {
+      // console.log(global.currentId)
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
@@ -225,33 +258,48 @@ const NetworkVisualization = ({ data }) => {
       d.fx = null;
       d.fy = null;
     }
+    // Define a variable to track the last time tick was called
+    let lastTickTime = 0;
+
     // Function to update positions on each animation frame
     function tick() {
-      // console.log("Cool Dawg")
-      resetVisualization();
-      link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
+      const now = performance.now();
+  
 
-      node.attr('cx', d => {
-        d.x = Math.max(labelBackgroundWidth / 2, Math.min(width - labelBackgroundWidth / 2, d.x));
-        return d.x;
-      });
+      // Only update the visualization if a certain amount of time has passed (e.g., every 100ms)
+      if (now - lastTickTime > 200) {
+        lastTickTime = now;
+        console.log("current: " + global.currentId)
+        if(global.pastId != global.currentId){
+          console.log("Past: " + global.pastId)
+          global.pastId = global.currentId;
+          console.log("New: " + global.pastId)
+          filterNodesAndLinks(global.currentId)
+        }
+        resetVisualization();
+        link
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
 
-      node.attr('cy', d => {
-        d.y = Math.max(labelBackgroundHeight / 2, Math.min(height - labelBackgroundHeight / 2, d.y));
-        return d.y;
-      });
+        node.attr('cx', d => {
+          d.x = Math.max(labelBackgroundWidth / 2, Math.min(width - labelBackgroundWidth / 2, d.x));
+          return d.x;
+        });
 
-      labelsGroup
-        .attr('transform', d => `translate(${d.x - labelX},${d.y - labelY})`); // Position the label group
+        node.attr('cy', d => {
+          d.y = Math.max(labelBackgroundHeight / 2, Math.min(height - labelBackgroundHeight / 2, d.y));
+          return d.y;
+        });
+
+        labelsGroup
+          .attr('transform', d => `translate(${d.x - labelX},${d.y - labelY})`); // Position the label group
+      }
 
       // Request the next animation frame
       requestAnimationFrame(tick);
     }
-    // console.log("Cool")
     // Start the simulation and initiate animation
     simulation.on('tick', tick);
 

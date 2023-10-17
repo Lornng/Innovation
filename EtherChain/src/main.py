@@ -20,10 +20,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# need to define a function to get node basic information
-# Define a function to get a node by a property value
+def get_node_address_by_address(addressId):
+    with GraphDatabase.driver(uri, auth=(user, password)) as driver:
+        # Define a query to retrieve the node by a property value
+        query = (
+            f"MATCH (n:node) "
+            f"WHERE n.addressId = $property_value "
+            "RETURN n.addressId"
+        )
 
+        with driver.session() as session:
+            result = session.run(query, property_value=addressId)
+            address = result.single()
+            if address:
+                return address['n.addressId']
+            else:
+                return None
 
+@app.get("/get_node_address/{addressID}")
+async def get_node_address(addressID: str):
+    address = get_node_address_by_address(addressID)
+    if address:
+        return {"addressId": address}
+    else:
+        return {"error": "Node not found"}
+        
 def get_node_by_address(addressId):
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         # Define a query to retrieve the node by a property value
@@ -41,7 +62,6 @@ def get_node_by_address(addressId):
             else:
                 return None
 
-
 @app.get("/get_node/{addressID}")
 async def get_node(addressID: str):
     node = get_node_by_address(addressID)
@@ -49,22 +69,6 @@ async def get_node(addressID: str):
         return {"node": dict(node)}
     else:
         return {"error": "Node not found"}
-
-# Define a function to get all nodes of a specific label
-# def get_all_nodes(label):
-#     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
-#         with driver.session() as session:
-#             query = f"MATCH (n:{label}) RETURN n"
-#             result = session.run(query)
-#             return [dict(record['n']) for record in result]
-
-# @app.get("/getAllNodes/{label}")
-# async def get_all_nodes_route(label: str):
-#     nodes = get_all_nodes(label)
-#     return {"nodes": nodes}
-
-# Define a function to get all nodes without specifying a label
-
 
 def get_all_nodes():
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
@@ -82,7 +86,7 @@ async def get_all_nodes_route():
 # Define a function to run a Cypher query to retrieve node and its relationships
 # Define a function to get all nodes and their relationships
 
-
+# Get All Nodes and Relationships
 def get_all_nodes_and_relationships():
     with GraphDatabase.driver(uri, auth=(user, password)) as driver:
         with driver.session() as session:
@@ -102,6 +106,18 @@ async def get_all_nodes_and_relationships_route():
     data = get_all_nodes_and_relationships()
     return {"r": data}
 
+@app.get("/getAllNodesAndRelationships/{node_id}")
+async def get_all_nodes_and_relationships_route(node_id: str):
+    with GraphDatabase.driver(uri, auth=(user, password)) as driver:
+        with driver.session() as session:
+            query = f"""
+            MATCH (from)-[r]->(to)
+            WHERE from.addressId = $node_id OR to.addressId = $node_id
+            RETURN from.addressId AS fromAddress, to.addressId AS toAddress
+            """
+            result = session.run(query, node_id=node_id)
+            data = [{"from": record["fromAddress"], "to": record["toAddress"], "tokens": 0} for record in result]
+            return {"r": data}
 
 @app.get("/getGDBAddr")
 async def funcTest():
