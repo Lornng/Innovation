@@ -4,8 +4,6 @@ import { Footer, Header, About, Search, NetworkViz } from './containers';
 import { Navbar } from './components';
 import './App.css';
 import CollapsibleTable from './components/tables/bot_table';
-import TableComponent from './components/tables/top_table';
-import VizButton from './components/tables/viz_button';
 
 const App = () => {
   return (
@@ -17,9 +15,7 @@ const App = () => {
         <About />
         {/* search section and table section here */}
         <Search />
-        <TableComponent/>
         <CollapsibleTable/>
-        {/* <VizButton/> */}
         <NetworkViz />
         <Footer />
     </div>

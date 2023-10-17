@@ -5,7 +5,7 @@ import { NetworkVisualization } from '../../components'
 const NetworkViz = () => {
 
   const data = {
-    wallets: ['wallet1', 'wallet2', 'wallet3', 'wallet4', 'wallet5', 'wallet6', 'wallet7'],
+    wallets: ['wallet1', 'wallet2', 'wallet3', 'wallet4', 'wallet5', 'wallet6', 'wallet7', 'wallet8'],
     transactions: [
       { from: 'wallet1', to: 'wallet2', tokens: 10 },
       { from: 'wallet1', to: 'wallet3', tokens: 5 },
@@ -13,6 +13,7 @@ const NetworkViz = () => {
       { from: 'wallet1', to: 'wallet5', tokens: 12 },
       { from: 'wallet1', to: 'wallet6', tokens: 10 },
       { from: 'wallet1', to: 'wallet7', tokens: 12 },
+      { from: 'wallet7', to: 'wallet8', tokens: 10 },
     ],
   };
 
