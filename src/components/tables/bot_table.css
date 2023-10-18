@@ -1,0 +1,102 @@
+/* remove the scroll bar */
+.bottableContainer {
+    width: 100%;
+    overflow-y: scroll;
+    margin-top: 50px;
+    margin-left: -5;
+    max-height: 70vh;
+}
+
+.bottableContainer::-webkit-scrollbar {
+    display: none !important;
+}
+
+.transaction-hash {
+    font-size: 14px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
+  }
+
+.transaction-hash:hover {
+    color:blueviolet;
+}
+
+/* viz button*/
+.viz_button_container {
+    height: 100px;
+}
+
+.viz_button_container #visual {
+    position: relative;
+    background: white;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1rem;
+    font-weight: 550;
+    padding: 5px 30px;
+    transition: 0.5s;
+    top:2.5rem;
+    margin-left: 40%;
+}
+
+.viz_button_container #visual:hover {
+    background:  #ff5252;
+    color: #ff5252;
+    letter-spacing: 0.25em;
+    box-shadow: 0 0 35px  #ff5252;
+}
+
+.viz_button_container #visual:before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: var(--color-bg);
+}
+
+.viz_button_container #visual span {
+    position: relative;
+    z-index: 1;
+}
+
+.viz_button_container #visual i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+.viz_button_container #visual i::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 15px;
+    height: 4px;
+    background: var(--color-bg);
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.viz_button_container #visual:hover i::before {
+    width: 20px;
+    left: 20px;
+}
+
+.viz_button_container #visual i::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 15px;
+    height: 4px;
+    background: var(--color-bg);
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+}
+
+.viz_button_container #visual:hover i::after {
+    width: 20px;
+}

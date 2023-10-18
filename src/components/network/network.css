@@ -1,0 +1,60 @@
+.link {
+  stroke: #7265ac;
+  stroke-opacity: 0.8;
+  stroke-width: 7px;
+}
+
+.node {
+  fill: rgb(30, 30, 73);
+  stroke: #000000;
+  stroke-width: 1.5px;
+  r: 30;
+}
+
+.label {
+  font-family: var(--font-family);
+  stroke-opacity: 0.6;
+  stroke-width: 2px;
+}
+
+/*tooltip */
+.label title {
+  display: none; 
+}
+
+.label:hover title {
+  display: block; 
+  position: absolute;
+  background: #fff; 
+  border: 1px solid #ccc; 
+  padding: 4px; 
+  z-index: 1; 
+}
+
+/*Responsive*/
+/*medium screens*/
+@media (max-width: 1000px) {
+
+  .node {
+    r: 25;
+    /*radius*/
+  }
+
+  .label {
+    font-size: small;
+  }
+}
+
+
+/*small screens*/
+@media (max-width: 550px) {
+
+  .node {
+    r: 20;
+    /*radius*/
+  }
+
+  .label {
+    font-size: medium;
+  }
+}
