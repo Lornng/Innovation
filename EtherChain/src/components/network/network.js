@@ -178,11 +178,12 @@ const NetworkVisualization = ({ data }) => {
       labelsGroup
         .append('text')
         .attr('class', 'label')
-        .text(d => d.id)
+        .text(d => `${d.id.slice(0, 2)}...${d.id.slice(-4)}`)
         .attr('dy', labelTextY) // Adjust label vertical position
         .attr('dx', labelTextX)
-        .attr('text-anchor', 'middle'); // Center-align the text
-
+        .attr('text-anchor', 'middle')
+        .append('title') // Add a title element for the tooltip
+        .text(d => `Full Address: 0x${d.id}`); // Full address for the tooltip; // Center-align the text
     }
 
     function filterNodesAndLinks(filterValue) {

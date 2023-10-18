@@ -1,4 +1,4 @@
-.ether_visualization {
+.ether__visualization {
     background-color: #031B34;
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.23);
     padding-top: 30px;
@@ -6,7 +6,7 @@
     /* display: flex; */
 }
 
-.ether__vizualization-heading {
+.ether__visualization-heading {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -16,13 +16,8 @@
     margin-right: 5rem;
 }
 
-/* .ether__vizualization-heading {
-    text-align: center;
-    height: auto;
-    width: 100vw;
-} */
 
-.ether__vizualization-heading h1 {
+.ether__visualization-heading h1 {
     margin-bottom: 30px;
     font-family: var(--font-family);
     font-weight: 800;
@@ -49,14 +44,14 @@
 /*responsive code*/
 @media screen and (max-width: 1000px) {
 
-    .ether__vizualization-heading {
+    .ether__visualization-heading {
         margin: 0 0 2rem 0;
     }
 
 }
 /*phone size*/
 @media screen and (max-width: 550px) {
-    .ether__vizualization-heading h1 {
+    .ether__visualization-heading h1 {
         font-size: 45px;
         line-height: 40px;
     }

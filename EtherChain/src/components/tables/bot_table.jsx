@@ -49,7 +49,12 @@ function createData(record) {
       gas_used: record.relationship.gas_used,
       gas_price: record.relationship.gas_price,
       block_number: record.relationship.block_number,
-      block_hash: record.relationship.block_hash,
+      block_hash: {
+        truncated: record.relationship.block_hash.length > 10
+          ? record.relationship.block_hash.slice(0, 4) + "...." + record.relationship.block_hash.slice(-7)
+          : record.relationship.block_hash,
+        full: record.relationship.block_hash,
+      },
       block_timestamp: record.relationship.block_timestamp,
     }
 }
@@ -95,7 +100,7 @@ function Row(props) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography fontWeight="bold" variant="h6" gutterBottom component="div">
-                History
+                Details
               </Typography>
               <Typography fontSize="14px" gutterBottom component="div">
                 <span style={{ fontWeight: 'bold' }}>Transaction Hash: </span>
@@ -120,7 +125,7 @@ function Row(props) {
                     <TableCell>{row.gas_used}</TableCell>
                     <TableCell>{row.gas_price}</TableCell>
                     <TableCell>{row.block_number}</TableCell>
-                    <TableCell>{row.block_hash}</TableCell>
+                    <TableCell title={row.block_hash.full}>{row.block_hash.truncated}</TableCell>
                     <TableCell>{row.block_timestamp}</TableCell>
                   </TableRow>
                 </TableBody>
@@ -135,6 +140,7 @@ function Row(props) {
 
 //this is for the collapsible table's design
 function CollapsibleTable({ data }) {
+  //prevent empty data
   if (!data || data.length === 0) {
     return null;
   }
@@ -165,6 +171,7 @@ function CollapsibleTable({ data }) {
               </TableRow>
             </TableHead>
             <TableBody>
+              {/* create records for the table */}
               {data.map((row, index) => (
                 <Row key={index} row={createData(row)} />
             ))}   

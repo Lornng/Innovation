@@ -17,6 +17,20 @@
   stroke-width: 2px;
 }
 
+/*tooltip */
+.label title {
+  display: none; 
+}
+
+.label:hover title {
+  display: block; 
+  position: absolute;
+  background: #fff; 
+  border: 1px solid #ccc; 
+  padding: 4px; 
+  z-index: 1; 
+}
+
 /*Responsive*/
 /*medium screens*/
 @media (max-width: 1000px) {

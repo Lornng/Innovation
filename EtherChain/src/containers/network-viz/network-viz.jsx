@@ -40,8 +40,8 @@ const NetworkViz = () => {
   }, []);
 
   return (
-    <div className="ether_visualization sectionpadding" id="visualization">
-      <div className="ethervizualization-heading">
+    <div className="ether__visualization sectionpadding" id="visualization">
+      <div className="ether__visualization-heading">
         <h1 className="gradient__text">Visualization</h1>
       </div>
       {loading ? (
