@@ -1,4 +1,17 @@
-/* styles.css */
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center contents horizontally */
+    width: 100%;
+  }
+
+.tablecontainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-top: 10vh;
+}
+
 .searchInput{
     margin-top: 5vh;
     margin-bottom: 5vh;

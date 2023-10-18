@@ -3,7 +3,6 @@ import React from 'react'
 import { Footer, Header, About, Search, NetworkViz } from './containers';
 import { Navbar } from './components';
 import './App.css';
-import CollapsibleTable from './components/tables/bot_table';
 
 const App = () => {
   return (
@@ -13,9 +12,8 @@ const App = () => {
             <Header />
         </div>
         <About />
-        {/* search section and table section here */}
+        {/* search section here */}
         <Search />
-        <CollapsibleTable/>
         <NetworkViz />
         <Footer />
     </div>

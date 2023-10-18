@@ -15,36 +15,54 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import "./bot_table.css";
 import VizButton from './viz_button';
 
-
-function createData(transactions, original, end, status, price) {
-
-  return {
-    transactions: {
-      truncated: transactions.length > 10
-        ? transactions.slice(0, 4) + "...." + transactions.slice(-7)
-        : transactions,
-      full: transactions,
-    },
-    original,
-    end,
-    status,
-    price,
-    history: [
-      {
-        date: '2020-01-05',
-        walletaddress: 'asdfsfasdfsdfasdf',
-        amount: 3,
-        inflow: 4,
+//fields of data available: from_address,to_address,hash,value,input,transaction_index,gas,gas_used,gas_price,transaction_fee,block_number,block_hash,block_timestamp
+function createData(record) {
+    return {
+      transaction_index: record.relationship.transaction_index,
+      hash: {
+        truncated: record.relationship.hash.length > 10
+          ? record.relationship.hash.slice(0, 4) + "...." + record.relationship.hash.slice(-7)
+          : record.relationship.hash,
+        full: record.relationship.hash,
       },
-      {
-        date: '2020-01-02',
-        walletaddress: 'Anonymous',
-        amount: 1,
-        outflow: 2,
+      from_address: {
+        truncated: record.from.addressId.length > 10
+          ? record.from.addressId.slice(0, 4) + "...." + record.from.addressId.slice(-7)
+          : record.from.addressId,
+        full: record.from.addressId,
       },
-    ],
-  };
+      to_address: {
+        truncated: record.to.addressId.length > 10
+          ? record.to.addressId.slice(0, 4) + "...." + record.to.addressId.slice(-7)
+          : record.to.addressId,
+        full: record.to.addressId,
+      },
+      transaction_fee: record.relationship.transaction_fee,
+      value: record.relationship.value,
+      input: {
+        truncated: record.relationship.input.length > 10
+          ? record.relationship.input.slice(0, 4) + "...." + record.relationship.input.slice(-7)
+          : record.relationship.input,
+        full: record.relationship.input,
+      },
+      gas: record.relationship.gas,
+      gas_used: record.relationship.gas_used,
+      gas_price: record.relationship.gas_price,
+      block_number: record.relationship.block_number,
+      block_hash: record.relationship.block_hash,
+      block_timestamp: record.relationship.block_timestamp,
+    }
 }
+
+//table HeaderCellStyle
+const tableHeaderCellStyle = {
+  fontSize: '16px',
+  backgroundColor: 'black',
+  color: 'white',
+  fontWeight: 'bold',
+  textAlign: 'center',
+};
+
 
 function Row(props) {
   const { row } = props;
@@ -63,63 +81,48 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.transactions.truncated}
+        {row.transaction_index}
         </TableCell>
-        <TableCell align="center">{row.original}</TableCell>
-        <TableCell align="center">{row.end}</TableCell>
-        <TableCell align="center">{row.status}</TableCell>
-        <TableCell align="center">{row.price}</TableCell>
+        <TableCell title={row.hash.full}>{row.hash.truncated}</TableCell>
+        <TableCell title={row.from_address.full}>{row.from_address.truncated}</TableCell>
+        <TableCell title={row.from_address.full}>{row.to_address.truncated}</TableCell>
+        <TableCell>{row.transaction_fee}</TableCell>
+        <TableCell>{row.value}</TableCell>
       </TableRow>
 {/* the expanded table */}
-      <TableRow>
-        <TableCell sx={{ backgroundColor: 'white' }} style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+<TableRow>
+        <TableCell sx={{ backgroundColor: 'white' }} style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography fontWeight="bold" variant="h6" gutterBottom component="div">
                 History
               </Typography>
               <Typography fontSize="14px" gutterBottom component="div">
-                  <span style={{ fontWeight: 'bold' }}>Transaction Hash: </span> 
-                  <span className="transaction-hash">{row.transactions.full}</span>
+                <span style={{ fontWeight: 'bold' }}>Transaction Hash: </span>
+                <span className="transaction-hash">{row.hash.full}</span>
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow sx={{ backgroundColor: 'white' }}>
-                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Wallet Address</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Tokens</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Inflow($)</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Outflow($)</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Input</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Gas</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Gas Used</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Gas Price</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Block Number</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Block Hash</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Block Timestamp</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.walletaddress}</TableCell>
-                      <TableCell align="center">{historyRow.amount}</TableCell>
-                      <TableCell align="center">
-                        {historyRow.inflow && historyRow.inflow >0 ? (
-                          <>
-                          {historyRow.inflow}&nbsp;(${Math.round(historyRow.inflow * row.price * 100) / 100})
-                          </>
-                        ): (
-                          "-"
-                        )}
-                        </TableCell>
-                      <TableCell align="center">
-                        {historyRow.outflow && historyRow.outflow >0 ? (
-                          <>
-                          {historyRow.outflow}&nbsp;(${Math.round(historyRow.outflow * row.price * 100) / 100})
-                          </>
-                        ): (
-                          "-"
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow>
+                    <TableCell title={row.input.full} >{row.input.truncated}</TableCell>
+                    <TableCell>{row.gas}</TableCell>
+                    <TableCell>{row.gas_used}</TableCell>
+                    <TableCell>{row.gas_price}</TableCell>
+                    <TableCell>{row.block_number}</TableCell>
+                    <TableCell>{row.block_hash}</TableCell>
+                    <TableCell>{row.block_timestamp}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -130,25 +133,11 @@ function Row(props) {
   );
 }
 
-const rows = [
-  createData('0x51d370f70627e6e59b733b076e77d3e8c363ab0774b8bd702eaf297bfdf6af79', 'asdfsfasdfsdfasdf', "asdiurjnfgehh44", 'Succesful', 33.7),
-  createData('0xk37ee64365b3bf00de7f8fee7845fe2c1916312975d73bbc6a83a38292d54d0b', 'asdfsfasdfsdfasdf', "asdiurjnfgehh44", 'Succesful', 20),
-  createData('0x8fd370f70627e6e59b733b076e77d3e8c363ab0774b8bd702eaf297efdr6a81j', 'asdfsfasdfsdfasdf', "asdiurjnfgehh44", 'Failed', 50),
-  createData('0x40d370f70627e6e59b733b06f7123e86c363ab0774b8bd702eaf297bfdf6aaaj', 'asdfsfasdfsdfasdf', "asdiurjnfgehh44", 'Succesful', 88),
-  createData('0x35d370f70627e6e59b733b076e77d3e8c363ab0774b8bd702eaf297bfdf6af79', 'asdfsfasdfsdfasdf', "asdiurjnfgehh44", 'Failed', 27.5),
-];
-
 //this is for the collapsible table's design
-function CollapsibleTable() {
-//Define the header table
-  const tableHeaderCellStyle = {
-    fontSize: '16px',
-    backgroundColor: 'black',
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  };
-
+function CollapsibleTable({ data }) {
+  if (!data || data.length === 0) {
+    return null;
+  }
   return (
     <div>
       <div 
@@ -167,17 +156,18 @@ function CollapsibleTable() {
             <TableHead>
               <TableRow>
                 <TableCell sx={tableHeaderCellStyle} />
+                <TableCell sx={tableHeaderCellStyle}>Transaction Index</TableCell>
                 <TableCell sx={tableHeaderCellStyle}>Transaction Hash</TableCell>
-                <TableCell sx={tableHeaderCellStyle}>From</TableCell>
-                <TableCell sx={tableHeaderCellStyle}>To</TableCell>
-                <TableCell sx={tableHeaderCellStyle}>Status</TableCell>
-                <TableCell sx={tableHeaderCellStyle}>Price(ETH)</TableCell>
+                <TableCell sx={tableHeaderCellStyle}>From Address</TableCell>
+                <TableCell sx={tableHeaderCellStyle}>To Address</TableCell>
+                <TableCell sx={tableHeaderCellStyle}>Transaction Fee</TableCell>
+                <TableCell sx={tableHeaderCellStyle}>Transaction Value</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <Row key={row.transactions.truncated} row={row} />
-              ))}
+              {data.map((row, index) => (
+                <Row key={index} row={createData(row)} />
+            ))}   
             </TableBody>
           </Table>
         </TableContainer>
