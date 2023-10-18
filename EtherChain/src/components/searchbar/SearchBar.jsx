@@ -6,7 +6,6 @@ import axios from "axios";
 import TopTable from '../tables/top_table'; 
 import CollapsibleTable from '../tables/bot_table';
 
-
 // add onclick behavior that retrieves information about address
 
 // //use UseEffect
@@ -14,6 +13,7 @@ function SearchBar() {
     const [inputValue, setInputValue] = useState('');
     const [responseNode, setResponseNode] = useState(null);
     const [responseRelation, setResponseRelation] = useState([]);
+    const [balance, setBalance] = useState(null);
     const [error, setError] = useState(null);
   
     const handleInputChange = (event) => {
@@ -24,7 +24,7 @@ function SearchBar() {
     const handleButtonClick = () => {
       // Clear the previous data before making a new API request
       setResponseRelation([]);      
-
+      //retrieve the current node using node addressID
       axios
         .get(`http://127.0.0.1:8000/get_node/${inputValue}`)
         .then((response) => {
@@ -55,6 +55,17 @@ function SearchBar() {
             console.error("Error in getting response data:", error);
             setError('An error occurred while fetching data. Please try again later.');
           });
+
+        //retrieve wallet balance
+        axios
+          .get(`http://127.0.0.1:8000/get_balance/${inputValue}`)
+          .then((response) => {
+          setBalance(response.data.balance_eth);
+        })
+          .catch((error) => {
+          console.error('Error in getting response data:', error);
+          setError('An error occurred while fetching data. Please try again later.');
+        });
     };
 
     const fromNodeAddress = responseNode && responseNode.node.addressId;
@@ -72,8 +83,8 @@ function SearchBar() {
               </div>
               {/* Only appear when data input is available */}
               <div className='tablecontainer'>
-                {fromNodeAddress && fromNodeType && (
-                  <TopTable address={fromNodeAddress} type={fromNodeType} />
+                {fromNodeAddress && fromNodeType && balance !== null && !error && (
+                  <TopTable address={fromNodeAddress} type={fromNodeType} balance={balance} />
                 )}
                 {responseRelation && responseRelation.length > 0 && (
                   <CollapsibleTable data={responseRelation} />

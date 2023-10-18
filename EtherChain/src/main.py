@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from neo4j import GraphDatabase
+from web3 import Web3
+import eth_utils
 
 # for security reasons
 # you can store your database information in a separate file
@@ -19,6 +21,30 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Ethereum node URL
+eth_node_url = "https://mainnet.infura.io/v3/ecaaa7d8d4a24a239033a9fa90498f5e"  # Ethereum endpoint
+
+# Initialize Web3 instance
+w3 = Web3(Web3.HTTPProvider(eth_node_url))
+
+# Function to check if an Ethereum address is valid
+def is_valid_address(address):
+    return eth_utils.is_address(address)
+
+# Function to get the balance of a wallet address
+@app.get("/get_balance/{wallet_address}")
+async def get_balance(wallet_address: str):
+    if not is_valid_address(wallet_address):
+        return {"error": "Invalid Ethereum address"}
+
+    # Convert the address to checksum format
+    checksum_address = eth_utils.to_checksum_address(wallet_address)
+
+    balance_wei = w3.eth.get_balance(checksum_address)
+    balance_eth = w3.from_wei(balance_wei, "ether")
+
+    return {"balance_wei": balance_wei, "balance_eth": balance_eth}
 
 #need to define a function to get node basic information
 # Define a function to get a node by a property value

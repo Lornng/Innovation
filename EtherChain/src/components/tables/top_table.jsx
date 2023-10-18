@@ -4,7 +4,7 @@ import './top_table.css'; // Import your CSS file for styling
 //top table: basic wallet address information
 //display wallet balance
 
-const TopTable = ( {address, type} ) => {
+const TopTable = ( {address, type, balance} ) => {
   return (
     <div className="table-container" id="top_table_id">
       <table className="curved-table">
@@ -16,6 +16,10 @@ const TopTable = ( {address, type} ) => {
           <tr >
             <td className="black-cell">Type</td>
             <td style={{backgroundColor: "#DDDDDD"}}>{type}</td>
+          </tr>
+          <tr >
+            <td className="black-cell">ETH Balance</td>
+            <td style={{backgroundColor: "#DDDDDD"}}>{balance}</td>
           </tr>
         </tbody>
       </table>
