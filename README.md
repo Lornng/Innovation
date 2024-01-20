@@ -21,13 +21,13 @@ NEO4J_PASSWORD=DmFS2ipwgD0uFMe4V05GyeafLWUUMLQ7eMM35479mfs
 AURA_INSTANCEID=45513754
 AURA_INSTANCENAME=Instance01	
 
-
+```
 -----------------Neo4j Query----------------
 
 // CONSTRAINT creation
 // -------------------
 //
-// Create node uniqueness constraints, ensuring no duplicates for the given node label and ID property exist in the database. This also ensures no duplicates are introduced in the future.
+// Create node uniqueness constraints, ensuring no duplicates for the given node label and ID property exist in the database. This also ensures no duplicates are introduced in future.
 //
 // NOTE: The following constraint creation syntax is generated based on the current connected database version 5.11-aura.
 CREATE CONSTRAINT `imp_uniq_node_Name` IF NOT EXISTS
@@ -53,6 +53,7 @@ MERGE (n: `node` { `addressId`: row.`addressId` })
 SET n.`type` = toString(row.`type`)
 } IN TRANSACTIONS OF 10000 ROWS;
 
+
 // RELATIONSHIP load
 // -----------------
 //
@@ -75,6 +76,8 @@ SET r.`transaction_fee` = toString(row.`transaction_fee`)
 SET r.`block_number` = toString(row.`block_number`)
 SET r.`block_hash` = toString(row.`block_hash`)
 SET r.`block_timestamp` = toString(row.`block_timestamp`)
+
 } IN TRANSACTIONS OF 10000 ROWS;
 
 ----------------------------------------------------------------------
+```
