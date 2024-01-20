@@ -24,6 +24,7 @@ AURA_INSTANCENAME=Instance01
 
 
 -----------------Neo4j Query----------------
+
 // CONSTRAINT creation
 // -------------------
 //
