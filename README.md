@@ -14,7 +14,7 @@ A website that shows the network of crypto wallet <br>
 6. activate the neo4j database
 
 
-# Wait 60 seconds before connecting using these details, or login to https://console.neo4j.io to validate the Aura Instance is available
+*Wait 60 seconds before connecting using these details, or login to https://console.neo4j.io to validate the Aura Instance is available*
 NEO4J_URI=neo4j+s://45513754.databases.neo4j.io
 NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=DmFS2ipwgD0uFMe4V05GyeafLWUUMLQ7eMM35479mfs
